@@ -533,98 +533,97 @@ function Donate({ donateRef }) {
   const [toast, setToast] = useState(false);
 
   const selectedTier = DONATE_TIERS.find((t) => t.id === selected);
-  const amount = selected === 'custom' ? Number(custom) || 0 : selectedTier?.amount || 0;
+  const amount = custom ? Number(custom) : selectedTier ? selectedTier.amount : 0;
+  const monthlyMultiplier = frequency === 'monthly' ? 12 : 1;
+
+  function selectTier(id) {
+    setSelected(id);
+    setCustom('');
+  }
 
   function handleDonate(e) {
     e.preventDefault();
-    if (amount <= 0) {
+    if (!amount || amount <= 0) {
       alert('נא לבחור או להזין סכום תרומה תקין');
       return;
     }
     setToast(true);
     setTimeout(() => {
       setToast(false);
-    }, 3500);
+    }, 2800);
   }
 
   return (
-    <section className="section section-royal" id="donate" ref={donateRef}>
+    <section className="section donate" id="donate" ref={donateRef}>
       <div className="container">
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <span className="eyebrow">שותפות בשולחן</span>
-          <h2 className="h-display" style={{ color: 'var(--cream)', fontSize: 'clamp(28px, 3.8vw, 48px)' }}>
-            בחרו את חלקכם בחסד
-          </h2>
-          <p style={{ color: 'rgba(253,250,244,0.78)', fontSize: 17, maxWidth: 580, margin: '14px auto 0' }}>
-            כל תרומה מגיעה ישירות לרכישת מוצרי מזון טריים ומזינים למשפחות הנזקקות.
-            התרומה מוכרת לצרכי מס (סעיף 46).
-          </p>
+        <div className="donate-head">
+          <span className="eyebrow">תרומה</span>
+          <h2 className="h-display">בחרו סל. תוסיפו ברכה. הוסיפו אור.</h2>
+          <p>כל סכום מתורגם ישירות למזון על שולחנה של משפחה נזקקת. 100% מהתרומה מגיעה ליעדה.</p>
         </div>
 
-        <div className="donate-box">
-          <div className="donate-freq">
-            <button className={frequency === 'once' ? 'active' : ''} onClick={() => setFrequency('once')}>תרומה חד פעמית</button>
-            <button className={frequency === 'monthly' ? 'active' : ''} onClick={() => setFrequency('monthly')}>הוראת קבע חודשית</button>
-          </div>
-
+        <div className="donate-card">
           <div className="donate-grid">
             {DONATE_TIERS.map((tier) => {
-              const IconComp = Icon[tier.icon] || Icon.basket;
+              const active = selected === tier.id && !custom;
+              const IconCmp = Icon[tier.icon] || Icon.basket;
               return (
                 <button
                   key={tier.id}
-                  className={`donate-card ${selected === tier.id ? 'active' : ''} ${tier.popular ? 'popular' : ''}`}
-                  onClick={() => { setSelected(tier.id); setCustom(''); }}
-                >
-                  {tier.popular && <span className="popular-badge">הנפוץ ביותר</span>}
-                  <IconComp width="28" height="28" style={{ color: selected === tier.id ? 'var(--cream)' : 'var(--gold)', marginBottom: 8 }} />
-                  <div className="tier-amount">₪{tier.amount}</div>
-                  <div className="tier-label">{tier.label}</div>
-                  <div className="tier-feeds">{tier.feeds}</div>
-                </button>
-              );
+                  className={`donate-tile ${active ? 'active' : ''}`}
+                  onClick={() => selectTier(tier.id)}>
+                  
+                  {tier.popular &&
+                  <span style={{
+                    position: 'absolute', top: 10, insetInlineStart: 10,
+                    fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em',
+                    color: active ? 'var(--gold)' : 'var(--gold-deep)',
+                    textTransform: 'uppercase'
+                  }}>★ פופולרי</span>
+                  }
+                  <IconCmp className="basket-icon" style={{ color: active ? 'var(--gold)' : 'var(--royal)' }} />
+                  <div className="amount">
+                    {tier.amount}<span className="amount-currency">₪</span>
+                  </div>
+                  <div className="label">{tier.label}</div>
+                  <div className="feeds">{tier.feeds}</div>
+                </button>);
             })}
           </div>
 
-          <div style={{ marginTop: 24 }}>
-            <button
-              className={`donate-card custom-card ${selected === 'custom' ? 'active' : ''}`}
-              style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', textAlign: 'right' }}
-              onClick={() => setSelected('custom')}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <span className="tier-label" style={{ margin: 0, fontSize: 16 }}>סכום אחר לתרומה:</span>
-                {selected === 'custom' && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ fontSize: 20, fontFamily: 'var(--font-display)', color: 'var(--cream)' }}>₪</span>
-                    <input
-                      type="number"
-                      value={custom}
-                      onChange={(e) => setCustom(e.target.value)}
-                      placeholder="הזינו סכום"
-                      autoFocus
-                      style={{
-                        background: 'transparent',
-                        border: 'none',
-                        borderBottom: '2px solid var(--gold)',
-                        color: 'var(--cream)',
-                        fontSize: 20,
-                        fontFamily: 'var(--font-display)',
-                        width: 100,
-                        padding: '2px 4px',
-                        outline: 'none'
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-              {selected !== 'custom' && <span style={{ color: 'var(--gold)', fontSize: 14 }}>לחצו להזנה ✎</span>}
-            </button>
+          <div className="donate-custom">
+            <div className="input-wrap">
+              <input
+                type="number"
+                placeholder="או הקלידו סכום אחר"
+                value={custom}
+                onChange={(e) => {setCustom(e.target.value);setSelected('');}}
+                min="1" />
+              
+              <span className="currency-mark">₪</span>
+            </div>
           </div>
 
-          <div style={{ marginTop: 32, textAlign: 'center' }}>
-            <button className="btn btn-gold" onClick={handleDonate} style={{ width: '100%', justifyContent: 'center', padding: '16px 32px', fontSize: 18 }}>
-              תרומה בסך ₪{amount} {frequency === 'monthly' ? 'בחודש' : 'חד פעמית'}
+          <div className="donate-frequency">
+            <button className={frequency === 'once' ? 'active' : ''} onClick={() => setFrequency('once')}>חד-פעמי</button>
+            <button className={frequency === 'monthly' ? 'active' : ''} onClick={() => setFrequency('monthly')}>הוראת קבע חודשית</button>
+          </div>
+
+          <div className="donate-summary">
+            <div>
+              <div className="total">
+                {frequency === 'monthly' ? 'תרומה חודשית: ' : 'סך תרומה: '}
+                <span>{amount.toLocaleString('he-IL')} ₪</span>
+                {frequency === 'monthly' &&
+                <span style={{ fontSize: 14, color: 'var(--ink-soft)', marginInlineStart: 10 }}>
+                    (≈ {(amount * monthlyMultiplier).toLocaleString('he-IL')} ₪ לשנה)
+                  </span>
+                }
+              </div>
+              <div className="receipt">קבלה לפי סעיף 46 · עיבוד מאובטח SSL</div>
+            </div>
+            <button className="btn btn-gold" onClick={handleDonate}>
+              לתרום {amount > 0 ? `${amount.toLocaleString('he-IL')}₪` : ''}
               <Icon.arrow className="arrow" width="14" />
             </button>
           </div>
