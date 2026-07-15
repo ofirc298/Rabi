@@ -1,8 +1,5 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
-
-const DATA_FILE = path.join(process.cwd(), 'data', 'submissions.json');
+import { readData, writeData } from '@/lib/db';
 
 export async function POST(request) {
   try {
@@ -12,15 +9,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Read current data
-    let fileContent;
-    try {
-      fileContent = await fs.readFile(DATA_FILE, 'utf-8');
-    } catch (err) {
-      fileContent = JSON.stringify({ contact: [], volunteer: [] });
-    }
-
-    const data = JSON.parse(fileContent);
+    const data = await readData();
     const newSubmission = {
       id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
       firstName,
@@ -33,7 +22,7 @@ export async function POST(request) {
     data.volunteer = data.volunteer || [];
     data.volunteer.unshift(newSubmission); // Add to the beginning
 
-    await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
+    await writeData(data);
 
     return NextResponse.json({ success: true, submission: newSubmission });
   } catch (error) {

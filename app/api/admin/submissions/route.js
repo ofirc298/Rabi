@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+import { readData, writeData } from '@/lib/db';
 
-const DATA_FILE = path.join(process.cwd(), 'data', 'submissions.json');
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'yeshaya123';
 
 function checkAuth(request) {
@@ -20,13 +18,7 @@ export async function GET(request) {
   }
 
   try {
-    let fileContent;
-    try {
-      fileContent = await fs.readFile(DATA_FILE, 'utf-8');
-    } catch (err) {
-      fileContent = JSON.stringify({ contact: [], volunteer: [] });
-    }
-    const data = JSON.parse(fileContent);
+    const data = await readData();
     return NextResponse.json(data);
   } catch (error) {
     console.error('Fetch submissions error:', error);
@@ -48,14 +40,7 @@ export async function DELETE(request) {
       return NextResponse.json({ error: 'Missing type or id' }, { status: 400 });
     }
 
-    let fileContent;
-    try {
-      fileContent = await fs.readFile(DATA_FILE, 'utf-8');
-    } catch (err) {
-      return NextResponse.json({ error: 'Database file not found' }, { status: 404 });
-    }
-
-    const data = JSON.parse(fileContent);
+    const data = await readData();
 
     if (type === 'contact') {
       data.contact = (data.contact || []).filter((item) => item.id !== id);
@@ -65,7 +50,7 @@ export async function DELETE(request) {
       return NextResponse.json({ error: 'Invalid type' }, { status: 400 });
     }
 
-    await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
+    await writeData(data);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Delete submission error:', error);
