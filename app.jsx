@@ -626,7 +626,7 @@ function Footer() {
 
           <div>
             <h4>צור קשר</h4>
-            <p><a href="tel:+972500000000">050-000-0000</a></p>
+            <p><a href="tel:04-610-1600">04-610-1600</a></p>
             <p><a href="mailto:hello@ohel-yeshaya.org">hello@ohel-yeshaya.org</a></p>
             <p style={{ fontSize: 12, color: 'rgba(253,250,244,0.55)' }}>לתגובות, הצעות ופרטים נוספים</p>
           </div>
@@ -747,7 +747,7 @@ function Contact() {
             <ul className="contact-info">
               <li>
                 <span className="ci-key">טלפון</span>
-                <a href="tel:+972500000000" className="ci-val">050-000-0000</a>
+                <a href="tel:04-610-1600" className="ci-val">04-610-1600</a>
               </li>
               <li>
                 <span className="ci-key">דוא״ל</span>
