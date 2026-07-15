@@ -1,94 +1,108 @@
-const { useState, useEffect, useRef } = React;
+"use client";
+
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  useTweaks, TweaksPanel, TweakSection, TweakSlider, TweakRadio, TweakSelect
+} from './tweaks-panel';
 
 // ====== Tweakable defaults ======
-const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+const TWEAK_DEFAULTS = {
   "primaryHue": 250,
   "goldHue": 75,
   "fontDisplay": "Frank Ruhl Libre",
   "fontBody": "Heebo",
   "logoFrame": "filigree",
   "heroVariant": "imagery"
-} /*EDITMODE-END*/;
+};
 
 // ====== Iconography (simple, line-based) ======
 const Icon = {
-  basket: (props) =>
-  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  basket: (props) => (
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M5 11h22l-2.5 14a2 2 0 0 1-2 1.7H9.5a2 2 0 0 1-2-1.7L5 11Z" />
       <path d="M11 11l3-6M21 11l-3-6" />
       <path d="M5 11h22" />
       <path d="M12 16v6M16 16v6M20 16v6" />
-    </svg>,
+    </svg>
+  ),
 
-  basketLg: (props) =>
-  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  basketLg: (props) => (
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M4 11h24l-3 16a2 2 0 0 1-2 1.7H9a2 2 0 0 1-2-1.7L4 11Z" />
       <path d="M9 11l4-7M23 11l-4-7" />
       <circle cx="16" cy="19" r="1.5" />
-    </svg>,
+    </svg>
+  ),
 
-  basketHeart: (props) =>
-  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  basketHeart: (props) => (
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M5 11h22l-2.5 14a2 2 0 0 1-2 1.7H9.5a2 2 0 0 1-2-1.7L5 11Z" />
       <path d="M11 11l3-6M21 11l-3-6" />
       <path d="M16 23.5c-2-1.4-4-2.6-4-4.6a2 2 0 0 1 4-.7 2 2 0 0 1 4 .7c0 2-2 3.2-4 4.6Z" fill="currentColor" stroke="none" />
-    </svg>,
+    </svg>
+  ),
 
-  arrow: (props) =>
-  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  arrow: (props) => (
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M11 8H1M5 4 1 8l4 4" />
-    </svg>,
+    </svg>
+  ),
 
-  calendar: (props) =>
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  calendar: (props) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <rect x="3" y="5" width="18" height="16" rx="2" />
       <path d="M3 9h18M8 3v4M16 3v4" />
-    </svg>,
+    </svg>
+  ),
 
-  pin: (props) =>
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  pin: (props) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" />
       <circle cx="12" cy="9" r="2.5" />
-    </svg>,
+    </svg>
+  ),
 
-  clock: (props) =>
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  clock: (props) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <circle cx="12" cy="12" r="9" />
       <path d="M12 7v5l3 2" />
-    </svg>,
+    </svg>
+  ),
 
-  ornament: (props) =>
-  <svg viewBox="0 0 24 8" fill="none" {...props}>
+  ornament: (props) => (
+    <svg viewBox="0 0 24 8" fill="none" {...props}>
       <path d="M0 4h7M17 4h7" stroke="currentColor" strokeWidth="0.8" />
       <circle cx="12" cy="4" r="1.5" stroke="currentColor" strokeWidth="0.8" fill="none" />
       <path d="M9 4l1.5-1.2M14 4l1.5-1.2M9 4l1.5 1.2M14 4l1.5 1.2" stroke="currentColor" strokeWidth="0.8" />
-    </svg>,
+    </svg>
+  ),
 
-  heart: (props) =>
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  heart: (props) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M12 20s-7-4.5-7-10a4.5 4.5 0 0 1 8.5-2A4.5 4.5 0 0 1 19 10c0 5.5-7 10-7 10Z" />
-    </svg>,
+    </svg>
+  ),
 
-  users: (props) =>
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  users: (props) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <circle cx="9" cy="9" r="3.2" />
       <path d="M3 19c0-3 2.7-5 6-5s6 2 6 5" />
       <circle cx="17" cy="8" r="2.6" />
       <path d="M15.5 13.2c2.6.3 4.5 2 4.5 4.8" />
     </svg>
-
+  )
 };
 
-const TENT_SVG =
-<svg viewBox="0 0 320 110" fill="none" stroke="oklch(0.74 0.13 80)" strokeWidth="1" strokeLinecap="round">
+const TENT_SVG = (
+  <svg viewBox="0 0 320 110" fill="none" stroke="oklch(0.74 0.13 80)" strokeWidth="1" strokeLinecap="round">
     <path d="M20 100 L160 12 L300 100" />
     <path d="M50 100 L160 30 L270 100" opacity="0.55" />
     <path d="M160 12 V100" strokeDasharray="2 4" />
     <path d="M120 100 Q160 70 200 100" />
     <circle cx="160" cy="12" r="2.5" fill="oklch(0.82 0.16 85)" stroke="none" />
     <path d="M0 100 H320" />
-  </svg>;
-
+  </svg>
+);
 
 // ====== Nav ======
 function Nav({ onDonate }) {
@@ -96,7 +110,7 @@ function Nav({ onDonate }) {
     <header className="nav">
       <div className="container nav-inner">
         <a href="#top" className="nav-brand">
-          <img src="assets/logo.png" alt="אהל ישעיה" />
+          <img src="/assets/logo.png" alt="אהל ישעיה" />
           <span>אהל ישעיה</span>
         </a>
         <nav className="nav-links">
@@ -107,11 +121,11 @@ function Nav({ onDonate }) {
         </nav>
         <button className="nav-cta" onClick={onDonate}>תרומה מהירה</button>
       </div>
-    </header>);
-
+    </header>
+  );
 }
 
-// ====== Rabbi Portrait (animated) ======
+// ====== Rabbi Portrait ======
 function RabbiPortrait() {
   const [revealed, setRevealed] = useState(false);
   const ref = useRef(null);
@@ -120,7 +134,9 @@ function RabbiPortrait() {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {if (e.isIntersecting) setRevealed(true);});
+      entries.forEach((e) => {
+        if (e.isIntersecting) setRevealed(true);
+      });
     }, { threshold: 0.25 });
     obs.observe(el);
     return () => obs.disconnect();
@@ -129,20 +145,18 @@ function RabbiPortrait() {
   return (
     <section className="rabbi-portrait" ref={ref} aria-label="דמותו של רבי ישעיה מקרסטיר">
       <div className={`rp-stage ${revealed ? 'is-revealed' : ''}`}>
-        {/* Ornamental gold rays */}
-        {/* Sun rays behind the portrait */}
         <svg className="rp-rays" viewBox="-100 -100 200 200" aria-hidden="true">
           <defs>
             <radialGradient id="rp-sun-glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="oklch(0.94 0.13 85)" stopOpacity="0.55"/>
-              <stop offset="35%" stopColor="oklch(0.85 0.14 82)" stopOpacity="0.28"/>
-              <stop offset="70%" stopColor="oklch(0.74 0.13 80)" stopOpacity="0.06"/>
-              <stop offset="100%" stopColor="oklch(0.74 0.13 80)" stopOpacity="0"/>
+              <stop offset="0%" stopColor="oklch(0.94 0.13 85)" stopOpacity="0.55" />
+              <stop offset="35%" stopColor="oklch(0.85 0.14 82)" stopOpacity="0.28" />
+              <stop offset="70%" stopColor="oklch(0.74 0.13 80)" stopOpacity="0.06" />
+              <stop offset="100%" stopColor="oklch(0.74 0.13 80)" stopOpacity="0" />
             </radialGradient>
           </defs>
-          <circle cx="0" cy="0" r="92" fill="url(#rp-sun-glow)"/>
+          <circle cx="0" cy="0" r="92" fill="url(#rp-sun-glow)" />
           {Array.from({ length: 36 }).map((_, i) => {
-            const angle = i / 36 * 360;
+            const angle = (i / 36) * 360;
             const tier = i % 3;
             const inner = tier === 0 ? 44 : 46;
             const outer = tier === 0 ? 96 : tier === 1 ? 84 : 76;
@@ -160,35 +174,31 @@ function RabbiPortrait() {
               />
             );
           })}
-          <circle cx="0" cy="0" r="44" fill="none" stroke="oklch(0.74 0.13 80)" strokeWidth="0.6" opacity="0.5"/>
-          <circle cx="0" cy="0" r="40" fill="none" stroke="oklch(0.74 0.13 80)" strokeWidth="0.4" opacity="0.35" strokeDasharray="2 3"/>
+          <circle cx="0" cy="0" r="44" fill="none" stroke="oklch(0.74 0.13 80)" strokeWidth="0.6" opacity="0.5" />
+          <circle cx="0" cy="0" r="40" fill="none" stroke="oklch(0.74 0.13 80)" strokeWidth="0.4" opacity="0.35" strokeDasharray="2 3" />
         </svg>
 
-        {/* Soft candlelit halo */}
         <div className="rp-halo" aria-hidden="true"></div>
         <div className="rp-halo rp-halo-2" aria-hidden="true"></div>
 
-        {/* Drifting motes */}
         <div className="rp-motes" aria-hidden="true">
-          {Array.from({ length: 9 }).map((_, i) =>
-          <span key={i} style={{ '--i': i, '--delay': `${i * 0.7}s` }} />
-          )}
+          {Array.from({ length: 9 }).map((_, i) => (
+            <span key={i} style={{ '--i': i, '--delay': `${i * 0.7}s` }} />
+          ))}
         </div>
 
-        {/* Portrait */}
         <div className="rp-portrait">
-          <img src="assets/rabi.png" alt="רבי ישעיה מקרסטיר" style={{ width: "328px" }} />
+          <img src="/assets/rabi.png" alt="רבי ישעיה מקרסטיר" style={{ width: "328px" }} />
         </div>
 
-        {/* Caption */}
         <div className="rp-caption">
           <div className="rp-script">״לְשַׂמֵּחַ לֵב נִדְכָּאִים״</div>
           <div className="rp-name">רבי ישעיה מקרסטיר</div>
           <div className="rp-years">תרל״ח – תרצ״ט · 1878–1939</div>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }
 
 // ====== Hero ======
@@ -199,7 +209,7 @@ function Hero({ onDonate }) {
         <div className="hero-logo-mount">
           <span className="corner tl" /><span className="corner tr" />
           <span className="corner bl" /><span className="corner br" />
-          <img src="assets/logo.png" alt="אהל ישעיה" />
+          <img src="/assets/logo.png" alt="אהל ישעיה" />
         </div>
         <span className="eyebrow">עמותת חסד וסיוע</span>
         <h1 className="h-display">
@@ -219,8 +229,8 @@ function Hero({ onDonate }) {
 
         <RabbiPortrait />
       </div>
-    </section>);
-
+    </section>
+  );
 }
 
 // ====== About ======
@@ -276,15 +286,15 @@ function About() {
 
         <div className="about-gallery" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
           <div style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', height: '340px', border: '1px solid var(--line)', boxShadow: 'var(--shadow-soft)' }}>
-            <img src="assets/media__1784124309155.jpg" alt="הכנת מנות חמות בעמותה" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="/assets/media__1784124309155.jpg" alt="הכנת מנות חמות בעמותה" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', height: '340px', border: '1px solid var(--line)', boxShadow: 'var(--shadow-soft)' }}>
-            <img src="assets/media__1784125711904.jpg" alt="אריזת סלטים טריים למשפחות" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="/assets/media__1784125711904.jpg" alt="אריזת סלטים טריים למשפחות" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }
 
 // ====== Logistics ======
@@ -334,10 +344,10 @@ function Logistics() {
 
           <div className="logistics-gallery" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: 28 }}>
             <div style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', height: '260px', border: '1px solid rgba(180,150,80,0.3)' }}>
-              <img src="assets/media__1784125702990.jpg" alt="מנות חמות ארוזות ומסומנות לשבת" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/assets/media__1784125702990.jpg" alt="מנות חמות ארוזות ומסומנות לשבת" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', height: '260px', border: '1px solid rgba(180,150,80,0.3)' }}>
-              <img src="assets/media__1784124309059.jpg" alt="טעינת סלי המזון לרכבי החלוקה" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/assets/media__1784124309059.jpg" alt="טעינת סלי המזון לרכבי החלוקה" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           </div>
 
@@ -349,22 +359,23 @@ function Logistics() {
           </div>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }
 
-// ====== Volunteer ======
+// ====== VolunteerForm ======
 function VolunteerForm() {
   const [form, setForm] = useState({ firstName: '', lastName: '', phone: '', source: '' });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
 
   function update(k, v) {
     setForm(prev => ({ ...prev, [k]: v }));
     if (errors[k]) setErrors(prev => ({ ...prev, [k]: null }));
   }
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     const next = {};
     if (!form.firstName.trim()) next.firstName = 'נא למלא שם פרטי';
@@ -375,11 +386,25 @@ function VolunteerForm() {
 
     setErrors(next);
     if (Object.keys(next).length === 0) {
-      setSubmitted(true);
-      setTimeout(() => {
-        setSubmitted(false);
-        setForm({ firstName: '', lastName: '', phone: '', source: '' });
-      }, 5000);
+      setSending(true);
+      try {
+        const res = await fetch('/api/volunteer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(form)
+        });
+        if (res.ok) {
+          setSubmitted(true);
+          setForm({ firstName: '', lastName: '', phone: '', source: '' });
+          setTimeout(() => setSubmitted(false), 6000);
+        } else {
+          alert('שגיאה בשליחת הנתונים. אנא נסה שוב מאוחר יותר.');
+        }
+      } catch (err) {
+        alert('שגיאה בתקשורת עם השרת.');
+      } finally {
+        setSending(false);
+      }
     }
   }
 
@@ -445,9 +470,9 @@ function VolunteerForm() {
         />
         {errors.source && <div className="field-error" style={{ fontSize: '11px', color: 'red', marginTop: '2px' }}>{errors.source}</div>}
       </div>
-      <button type="submit" className="btn btn-royal" style={{ width: '100%', justifyContent: 'center', padding: '12px 20px', fontSize: '15px' }}>
-        {submitted ? 'ההרשמה נשלחה בהצלחה!' : 'שליחת טופס הרשמה'}
-        {!submitted && <Icon.arrow className="arrow" width="14" />}
+      <button type="submit" disabled={sending} className="btn btn-royal" style={{ width: '100%', justifyContent: 'center', padding: '12px 20px', fontSize: '15px' }}>
+        {sending ? 'שולח...' : submitted ? 'ההרשמה נשלחה בהצלחה!' : 'שליחת טופס הרשמה'}
+        {!submitted && !sending && <Icon.arrow className="arrow" width="14" />}
       </button>
       {submitted && (
         <div style={{
@@ -460,19 +485,20 @@ function VolunteerForm() {
           color: 'var(--royal-deep)',
           textAlign: 'center'
         }}>
-          תודה על הרצון לעזור! פרטי ההתנדבות נשלחו ישירות למייל של העמותה (hello@ohel-yeshaya.org). הצוות יצור איתך קשר בהקדם 🤍
+          תודה על הרצון לעזור! פרטי ההתנדבות נרשמו בהצלחה במערכת העמותה. נציג יחזור אליך בהקדם 🤍
         </div>
       )}
     </form>
   );
 }
 
+// ====== Volunteer ======
 function Volunteer() {
   return (
     <section className="section" id="volunteer">
       <div className="container volunteer-grid">
         <div className="volunteer-image" style={{ overflow: 'hidden', borderRadius: 'var(--radius-lg)' }}>
-          <img src="assets/media__1784124309052.jpg" alt="מתנדבי עמותת אהל ישעיה באריזת מזון במטבח" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src="/assets/media__1784124309052.jpg" alt="מתנדבי עמותת אהל ישעיה באריזת מזון במטבח" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div className="volunteer-text">
           <span className="eyebrow start">משפחת המתנדבים</span>
@@ -494,11 +520,11 @@ function Volunteer() {
 
 // ====== Donate ======
 const DONATE_TIERS = [
-{ id: 'starter', amount: 90, label: 'סל בסיס', feeds: 'משפחה אחת · ארוחה', icon: 'basket' },
-{ id: 'standard', amount: 180, label: 'סל בסיסי', feeds: 'משפחה · שבוע', icon: 'basketLg', popular: true },
-{ id: 'family', amount: 360, label: 'סל משפחתי', feeds: 'משפחה גדולה · שבוע', icon: 'basketHeart' },
-{ id: 'patron', amount: 720, label: 'סל מורחב', feeds: '4 משפחות · שבוע', icon: 'basket' }];
-
+  { id: 'starter', amount: 90, label: 'סל בסיס', feeds: 'משפחה אחת · ארוחה', icon: 'basket' },
+  { id: 'standard', amount: 180, label: 'סל בסיסי', feeds: 'משפחה · שבוע', icon: 'basketLg', popular: true },
+  { id: 'family', amount: 360, label: 'סל משפחתי', feeds: 'משפחה גדולה · שבוע', icon: 'basketHeart' },
+  { id: 'patron', amount: 720, label: 'סל מורחב', feeds: '4 משפחות · שבוע', icon: 'basket' }
+];
 
 function Donate({ donateRef }) {
   const [selected, setSelected] = useState('standard');
@@ -507,96 +533,98 @@ function Donate({ donateRef }) {
   const [toast, setToast] = useState(false);
 
   const selectedTier = DONATE_TIERS.find((t) => t.id === selected);
-  const amount = custom ? Number(custom) : selectedTier ? selectedTier.amount : 0;
-  const monthlyMultiplier = frequency === 'monthly' ? 12 : 1;
+  const amount = selected === 'custom' ? Number(custom) || 0 : selectedTier?.amount || 0;
 
-  function selectTier(id) {
-    setSelected(id);
-    setCustom('');
-  }
-
-  function showToast() {
+  function handleDonate(e) {
+    e.preventDefault();
+    if (amount <= 0) {
+      alert('נא לבחור או להזין סכום תרומה תקין');
+      return;
+    }
     setToast(true);
-    setTimeout(() => setToast(false), 2800);
-  }
-
-  function submit() {
-    if (!amount || amount <= 0) return;
-    showToast();
+    setTimeout(() => {
+      setToast(false);
+    }, 3500);
   }
 
   return (
-    <section className="section donate" id="donate" ref={donateRef}>
+    <section className="section section-royal" id="donate" ref={donateRef}>
       <div className="container">
-        <div className="donate-head">
-          <span className="eyebrow">תרומה</span>
-          <h2 className="h-display">בחרו סל. תוסיפו ברכה. הוסיפו אור.</h2>
-          <p>כל סכום מתורגם ישירות למזון על שולחנה של משפחה נזקקת. 100% מהתרומה מגיעה ליעדה.</p>
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+          <span className="eyebrow">שותפות בשולחן</span>
+          <h2 className="h-display" style={{ color: 'var(--cream)', fontSize: 'clamp(28px, 3.8vw, 48px)' }}>
+            בחרו את חלקכם בחסד
+          </h2>
+          <p style={{ color: 'rgba(253,250,244,0.78)', fontSize: 17, maxWidth: 580, margin: '14px auto 0' }}>
+            כל תרומה מגיעה ישירות לרכישת מוצרי מזון טריים ומזינים למשפחות הנזקקות.
+            התרומה מוכרת לצרכי מס (סעיף 46).
+          </p>
         </div>
 
-        <div className="donate-card">
-          <div className="donate-grid">
-            {DONATE_TIERS.map((tier) => {
-              const active = selected === tier.id && !custom;
-              const IconCmp = Icon[tier.icon];
-              return (
-                <button
-                  key={tier.id}
-                  className={`donate-tile ${active ? 'active' : ''}`}
-                  onClick={() => selectTier(tier.id)}>
-                  
-                  {tier.popular &&
-                  <span style={{
-                    position: 'absolute', top: 10, insetInlineStart: 10,
-                    fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '.1em',
-                    color: active ? 'var(--gold)' : 'var(--gold-deep)',
-                    textTransform: 'uppercase'
-                  }}>★ פופולרי</span>
-                  }
-                  <IconCmp className="basket-icon" style={{ color: active ? 'var(--gold)' : 'var(--royal)' }} />
-                  <div className="amount">
-                    {tier.amount}<span className="amount-currency">₪</span>
-                  </div>
-                  <div className="label">{tier.label}</div>
-                  <div className="feeds">{tier.feeds}</div>
-                </button>);
-
-            })}
-          </div>
-
-          <div className="donate-custom">
-            <div className="input-wrap">
-              <input
-                type="number"
-                placeholder="או הקלידו סכום אחר"
-                value={custom}
-                onChange={(e) => {setCustom(e.target.value);setSelected('');}}
-                min="1" />
-              
-              <span className="currency-mark">₪</span>
-            </div>
-          </div>
-
-          <div className="donate-frequency">
-            <button className={frequency === 'once' ? 'active' : ''} onClick={() => setFrequency('once')}>חד-פעמי</button>
+        <div className="donate-box">
+          <div className="donate-freq">
+            <button className={frequency === 'once' ? 'active' : ''} onClick={() => setFrequency('once')}>תרומה חד פעמית</button>
             <button className={frequency === 'monthly' ? 'active' : ''} onClick={() => setFrequency('monthly')}>הוראת קבע חודשית</button>
           </div>
 
-          <div className="donate-summary">
-            <div>
-              <div className="total">
-                {frequency === 'monthly' ? 'תרומה חודשית: ' : 'סך תרומה: '}
-                <span>{amount.toLocaleString('he-IL')} ₪</span>
-                {frequency === 'monthly' &&
-                <span style={{ fontSize: 14, color: 'var(--ink-soft)', marginInlineStart: 10 }}>
-                    (≈ {(amount * monthlyMultiplier).toLocaleString('he-IL')} ₪ לשנה)
-                  </span>
-                }
+          <div className="donate-grid">
+            {DONATE_TIERS.map((tier) => {
+              const IconComp = Icon[tier.icon] || Icon.basket;
+              return (
+                <button
+                  key={tier.id}
+                  className={`donate-card ${selected === tier.id ? 'active' : ''} ${tier.popular ? 'popular' : ''}`}
+                  onClick={() => { setSelected(tier.id); setCustom(''); }}
+                >
+                  {tier.popular && <span className="popular-badge">הנפוץ ביותר</span>}
+                  <IconComp width="28" height="28" style={{ color: selected === tier.id ? 'var(--cream)' : 'var(--gold)', marginBottom: 8 }} />
+                  <div className="tier-amount">₪{tier.amount}</div>
+                  <div className="tier-label">{tier.label}</div>
+                  <div className="tier-feeds">{tier.feeds}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div style={{ marginTop: 24 }}>
+            <button
+              className={`donate-card custom-card ${selected === 'custom' ? 'active' : ''}`}
+              style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', textAlign: 'right' }}
+              onClick={() => setSelected('custom')}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                <span className="tier-label" style={{ margin: 0, fontSize: 16 }}>סכום אחר לתרומה:</span>
+                {selected === 'custom' && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ fontSize: 20, fontFamily: 'var(--font-display)', color: 'var(--cream)' }}>₪</span>
+                    <input
+                      type="number"
+                      value={custom}
+                      onChange={(e) => setCustom(e.target.value)}
+                      placeholder="הזינו סכום"
+                      autoFocus
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        borderBottom: '2px solid var(--gold)',
+                        color: 'var(--cream)',
+                        fontSize: 20,
+                        fontFamily: 'var(--font-display)',
+                        width: 100,
+                        padding: '2px 4px',
+                        outline: 'none'
+                      }}
+                    />
+                  </div>
+                )}
               </div>
-              <div className="receipt">קבלה לפי סעיף 46 · עיבוד מאובטח SSL</div>
-            </div>
-            <button className="btn btn-gold" onClick={submit}>
-              לתרום {amount > 0 ? `${amount.toLocaleString('he-IL')}₪` : ''}
+              {selected !== 'custom' && <span style={{ color: 'var(--gold)', fontSize: 14 }}>לחצו להזנה ✎</span>}
+            </button>
+          </div>
+
+          <div style={{ marginTop: 32, textAlign: 'center' }}>
+            <button className="btn btn-gold" onClick={handleDonate} style={{ width: '100%', justifyContent: 'center', padding: '16px 32px', fontSize: 18 }}>
+              תרומה בסך ₪{amount} {frequency === 'monthly' ? 'בחודש' : 'חד פעמית'}
               <Icon.arrow className="arrow" width="14" />
             </button>
           </div>
@@ -606,8 +634,8 @@ function Donate({ donateRef }) {
       <div className={`toast ${toast ? 'show' : ''}`}>
         תודה רבה — מעבר לסליקה מאובטחת...
       </div>
-    </section>);
-
+    </section>
+  );
 }
 
 // ====== Footer ======
@@ -617,7 +645,7 @@ function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div>
-            <img src="assets/logo.png" alt="אהל ישעיה" className="logo-mini" />
+            <img src="/assets/logo.png" alt="אהל ישעיה" className="logo-mini" />
             <p style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: 'var(--cream)', margin: '8px 0' }}>
               אהל ישעיה
             </p>
@@ -654,70 +682,23 @@ function Footer() {
           </div>
         </div>
       </div>
-    </footer>);
-
+    </footer>
+  );
 }
 
-// ====== Tweaks ======
-function TweaksUI({ tweaks, setTweak }) {
-  return (
-    <TweaksPanel>
-      <TweakSection title="צבעים">
-        <TweakSlider label="גוון כחול ראשי" value={tweaks.primaryHue} onChange={(v) => setTweak('primaryHue', v)} min={200} max={290} step={1} />
-        <TweakSlider label="גוון זהב" value={tweaks.goldHue} onChange={(v) => setTweak('goldHue', v)} min={50} max={110} step={1} />
-      </TweakSection>
-      <TweakSection title="טיפוגרפיה">
-        <TweakSelect
-          label="גופן כותרת"
-          value={tweaks.fontDisplay}
-          onChange={(v) => setTweak('fontDisplay', v)}
-          options={[
-          { value: 'Frank Ruhl Libre', label: 'Frank Ruhl Libre (קלאסי)' },
-          { value: 'David Libre', label: 'David Libre' },
-          { value: 'Noto Serif Hebrew', label: 'Noto Serif Hebrew' },
-          { value: 'Bellefair', label: 'Bellefair' }]
-          } />
-        
-        <TweakSelect
-          label="גופן גוף"
-          value={tweaks.fontBody}
-          onChange={(v) => setTweak('fontBody', v)}
-          options={[
-          { value: 'Heebo', label: 'Heebo' },
-          { value: 'Assistant', label: 'Assistant' },
-          { value: 'Rubik', label: 'Rubik' },
-          { value: 'Noto Sans Hebrew', label: 'Noto Sans Hebrew' }]
-          } />
-        
-      </TweakSection>
-      <TweakSection title="עיצוב">
-        <TweakRadio
-          label="מסגרת לוגו"
-          value={tweaks.logoFrame}
-          onChange={(v) => setTweak('logoFrame', v)}
-          options={[
-          { value: 'filigree', label: 'פיליגרן זהב' },
-          { value: 'minimal', label: 'מינימלי' },
-          { value: 'none', label: 'ללא' }]
-          } />
-        
-      </TweakSection>
-    </TweaksPanel>);
-
-}
-
-// ====== Contact Form ======
+// ====== Contact ======
 function Contact() {
   const [form, setForm] = useState({ name: '', phone: '', message: '' });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
 
   function update(k, v) {
     setForm(prev => ({ ...prev, [k]: v }));
     if (errors[k]) setErrors(prev => ({ ...prev, [k]: null }));
   }
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     const next = {};
     if (!form.name.trim()) next.name = 'נא למלא שם';
@@ -726,11 +707,25 @@ function Contact() {
     if (!form.message.trim()) next.message = 'נא לכתוב הודעה';
     setErrors(next);
     if (Object.keys(next).length === 0) {
-      setSubmitted(true);
-      setTimeout(() => {
-        setSubmitted(false);
-        setForm({ name: '', phone: '', message: '' });
-      }, 4000);
+      setSending(true);
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(form)
+        });
+        if (res.ok) {
+          setSubmitted(true);
+          setForm({ name: '', phone: '', message: '' });
+          setTimeout(() => setSubmitted(false), 5000);
+        } else {
+          alert('שגיאה בשליחת ההודעה. אנא נסה שוב מאוחר יותר.');
+        }
+      } catch (err) {
+        alert('שגיאה בתקשורת עם השרת.');
+      } finally {
+        setSending(false);
+      }
     }
   }
 
@@ -793,9 +788,9 @@ function Contact() {
               />
               {errors.message && <div className="field-error">{errors.message}</div>}
             </div>
-            <button type="submit" className="btn btn-royal" style={{ width: '100%', justifyContent: 'center' }}>
-              {submitted ? 'תודה! חזרנו אליכם בקרוב' : 'שליחה'}
-              {!submitted && <Icon.arrow className="arrow" width="14"/>}
+            <button type="submit" disabled={sending} className="btn btn-royal" style={{ width: '100%', justifyContent: 'center' }}>
+              {sending ? 'שולח...' : submitted ? 'תודה! פרטייך התקבלו במערכת העמותה' : 'שליחה'}
+              {!submitted && !sending && <Icon.arrow className="arrow" width="14" />}
             </button>
           </form>
         </div>
@@ -805,7 +800,7 @@ function Contact() {
 }
 
 // ====== App ======
-function App() {
+export default function Page() {
   const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const donateRef = useRef(null);
 
@@ -818,31 +813,36 @@ function App() {
     root.style.setProperty('--ink', `oklch(0.20 0.02 ${tweaks.primaryHue})`);
     root.style.setProperty('--ink-soft', `oklch(0.36 0.015 ${tweaks.primaryHue})`);
     root.style.setProperty('--gold', `oklch(0.65 0.09 ${tweaks.goldHue})`);
-    root.style.setProperty('--gold-bright', `oklch(0.74 0.11 ${tweaks.goldHue + 3})`);
-    root.style.setProperty('--gold-deep', `oklch(0.52 0.08 ${tweaks.goldHue - 5})`);
-    root.style.setProperty('--font-display', `"${tweaks.fontDisplay}", Georgia, serif`);
-    root.style.setProperty('--font-body', `"${tweaks.fontBody}", system-ui, sans-serif`);
+    root.style.setProperty('--gold-deep', `oklch(0.55 0.09 ${tweaks.goldHue})`);
+    root.style.setProperty('--gold-light', `oklch(0.85 0.06 ${tweaks.goldHue})`);
+    root.style.setProperty('--gold-soft', `oklch(0.92 0.03 ${tweaks.goldHue})`);
+
+    // Fonts
+    const fontsMap = {
+      'Frank Ruhl Libre': "'Frank Ruhl Libre', serif",
+      'David Libre': "'David Libre', serif",
+      'Noto Serif Hebrew': "'Noto Serif Hebrew', serif",
+      'Bellefair': "'Bellefair', serif",
+      'Heebo': "'Heebo', sans-serif",
+      'Assistant': "'Assistant', sans-serif",
+      'Rubik': "'Rubik', sans-serif",
+      'Noto Sans Hebrew': "'Noto Sans Hebrew', sans-serif"
+    };
+
+    root.style.setProperty('--font-display', fontsMap[tweaks.fontDisplay] || tweaks.fontDisplay);
+    root.style.setProperty('--font-body', fontsMap[tweaks.fontBody] || tweaks.fontBody);
+
+    // Frame
+    root.style.setProperty('--logo-border-radius', tweaks.logoFrame === 'filigree' ? '999px' : tweaks.logoFrame === 'minimal' ? '12px' : '0px');
+    root.style.setProperty('--logo-border-width', tweaks.logoFrame === 'none' ? '0px' : '2px');
+    root.style.setProperty('--logo-padding', tweaks.logoFrame === 'filigree' ? '8px' : tweaks.logoFrame === 'minimal' ? '4px' : '0px');
   }, [tweaks]);
 
-  // Apply logo frame variant
-  useEffect(() => {
-    const mount = document.querySelector('.hero-logo-mount');
-    if (!mount) return;
-    const corners = mount.querySelectorAll('.corner');
-    corners.forEach((c) => {
-      c.style.display = tweaks.logoFrame === 'none' ? 'none' : 'block';
-      c.style.borderColor = tweaks.logoFrame === 'minimal' ? 'var(--ink-soft)' : 'var(--gold)';
-      c.style.opacity = tweaks.logoFrame === 'minimal' ? '0.4' : '1';
-    });
-  }, [tweaks.logoFrame]);
-
   function scrollToDonate() {
-    const el = donateRef.current;
-    if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - 60;
-    window.scrollTo({ top, behavior: 'smooth' });
+    donateRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
+  // Render tweaks UI inside tweaks-panel if in edit mode
   return (
     <>
       <Nav onDonate={scrollToDonate} />
@@ -853,9 +853,49 @@ function App() {
       <Donate donateRef={donateRef} />
       <Contact />
       <Footer />
-      <TweaksUI tweaks={tweaks} setTweak={setTweak} />
-    </>);
 
+      <TweaksPanel title="עריכת עיצוב אהל ישעיה">
+        <TweakSection title="צבעים">
+          <TweakSlider label="גוון כחול ראשי" value={tweaks.primaryHue} onChange={(v) => setTweak('primaryHue', v)} min={200} max={290} step={1} />
+          <TweakSlider label="גוון זהב" value={tweaks.goldHue} onChange={(v) => setTweak('goldHue', v)} min={50} max={110} step={1} />
+        </TweakSection>
+        <TweakSection title="טיפוגרפיה">
+          <TweakSelect
+            label="גופן כותרת"
+            value={tweaks.fontDisplay}
+            onChange={(v) => setTweak('fontDisplay', v)}
+            options={[
+              { value: 'Frank Ruhl Libre', label: 'Frank Ruhl Libre (קלאסי)' },
+              { value: 'David Libre', label: 'David Libre' },
+              { value: 'Noto Serif Hebrew', label: 'Noto Serif Hebrew' },
+              { value: 'Bellefair', label: 'Bellefair' }
+            ]}
+          />
+          <TweakSelect
+            label="גופן גוף"
+            value={tweaks.fontBody}
+            onChange={(v) => setTweak('fontBody', v)}
+            options={[
+              { value: 'Heebo', label: 'Heebo' },
+              { value: 'Assistant', label: 'Assistant' },
+              { value: 'Rubik', label: 'Rubik' },
+              { value: 'Noto Sans Hebrew', label: 'Noto Sans Hebrew' }
+            ]}
+          />
+        </TweakSection>
+        <TweakSection title="עיצוב">
+          <TweakRadio
+            label="מסגרת לוגו"
+            value={tweaks.logoFrame}
+            onChange={(v) => setTweak('logoFrame', v)}
+            options={[
+              { value: 'filigree', label: 'פיליגרן זהב' },
+              { value: 'minimal', label: 'מינימלי' },
+              { value: 'none', label: 'ללא' }
+            ]}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
 }
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
