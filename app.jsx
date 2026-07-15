@@ -274,8 +274,13 @@ function About() {
           </div>
         </div>
 
-        <div className="about-banner" style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', height: '340px', border: '1px solid var(--line)', boxShadow: 'var(--shadow-soft)' }}>
-          <img src="assets/media__1784124309155.jpg" alt="הכנת מנות חמות וחלוקת מזון בעמותה" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div className="about-gallery" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+          <div style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', height: '340px', border: '1px solid var(--line)', boxShadow: 'var(--shadow-soft)' }}>
+            <img src="assets/media__1784124309155.jpg" alt="הכנת מנות חמות בעמותה" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+          <div style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', height: '340px', border: '1px solid var(--line)', boxShadow: 'var(--shadow-soft)' }}>
+            <img src="assets/media__1784125711904.jpg" alt="אריזת סלטים טריים למשפחות" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
         </div>
       </div>
     </section>);
@@ -327,8 +332,13 @@ function Logistics() {
             </div>
           </div>
 
-          <div style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', height: '280px', border: '1px solid rgba(180,150,80,0.3)', marginBottom: 12 }}>
-            <img src="assets/media__1784124309059.jpg" alt="טעינת סלי המזון לרכבי החלוקה" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <div className="logistics-gallery" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: 28 }}>
+            <div style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', height: '260px', border: '1px solid rgba(180,150,80,0.3)' }}>
+              <img src="assets/media__1784125702990.jpg" alt="מנות חמות ארוזות ומסומנות לשבת" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <div style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', height: '260px', border: '1px solid rgba(180,150,80,0.3)' }}>
+              <img src="assets/media__1784124309059.jpg" alt="טעינת סלי המזון לרכבי החלוקה" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
           </div>
 
           <div style={{ marginTop: 32, padding: '20px 24px', borderTop: '1px solid rgba(180,150,80,0.25)', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', justifyContent: 'center', textAlign: 'center' }}>
@@ -472,9 +482,8 @@ function Volunteer() {
             בחרו מה שמתאים לכם, וצוות הרכזים יחזור אליכם תוך 24 שעות.
           </p>
           <ul className="volunteer-list">
-            <li><span className="dot" /> אריזת סלים — ימי שני, 19:00–21:00</li>
-            <li><span className="dot" /> חלוקה דיסקרטית בבתים — ימי חמישי ולפי הצורך השבועי</li>
-            <li><span className="dot" /> נהיגה ולוגיסטיקה — לפי תיאום</li>
+            <li><span className="dot" /> אריזה וחלוקת סלים — ימי חמישי, 18:00–22:00</li>
+            <li><span className="dot" /> סיוע נוסף וחלוקה — לפי הצורך השבועי</li>
           </ul>
           <VolunteerForm />
         </div>
@@ -743,10 +752,6 @@ function Contact() {
               <li>
                 <span className="ci-key">דוא״ל</span>
                 <a href="mailto:hello@ohel-yeshaya.org" className="ci-val">hello@ohel-yeshaya.org</a>
-              </li>
-              <li>
-                <span className="ci-key">פעילות</span>
-                <span className="ci-val">בפריסה ארצית וגלובלית</span>
               </li>
             </ul>
           </div>
