@@ -28,7 +28,7 @@ const server = http.createServer((req, res) => {
 
   // Strip query strings
   const cleanPath = decodedUrl.split('?')[0];
-  let filePath = path.join(PUBLIC_DIR, cleanPath === '/' ? 'דף נחיתה.html' : cleanPath);
+  let filePath = path.join(PUBLIC_DIR, cleanPath === '/' ? 'index.html' : cleanPath);
 
   const ext = path.extname(filePath).toLowerCase();
   const contentType = MIME_TYPES[ext] || 'application/octet-stream';
