@@ -201,13 +201,13 @@ function Hero({ onDonate }) {
           <span className="corner bl" /><span className="corner br" />
           <img src="assets/logo.png" alt="אהל ישעיה" />
         </div>
-        <span className="eyebrow">עמותת חסד · חדרה</span>
+        <span className="eyebrow">עמותת חסד וסיוע</span>
         <h1 className="h-display">
           אהל ישעיה — ממשיכים את דרכו של<br />
-          <span className="accent">רבי ישעיה מקרסטיר</span> בחדרה
+          <span className="accent">רבי ישעיה מקרסטיר</span>
         </h1>
         <p className="subtitle">
-          יחד, נוודא שאף משפחה בחדרה לא תהיה רעבה. בואו להיות שותפים בשולחן הפתוח —
+          יחד, נוודא שאף משפחה לא תהיה רעבה. בואו להיות שותפים בשולחן הפתוח —
           בנתינה, בהתנדבות, ובהמשך מורשת של חסד ושפע.
         </p>
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', marginTop: 8 }}>
@@ -215,7 +215,6 @@ function Hero({ onDonate }) {
             לתרומה מהירה ומאובטחת
             <Icon.arrow className="arrow" width="14" />
           </button>
-          <a href="#about" className="btn btn-ghost">קראו על העמותה</a>
         </div>
 
         <RabbiPortrait />
@@ -228,49 +227,55 @@ function Hero({ onDonate }) {
 function About() {
   return (
     <section className="section" id="about">
-      <div className="container about-grid">
-        <div className="about-text">
-          <span className="eyebrow start">המורשת</span>
-          <h2 className="h-display">שולחן פתוח, יד נדיבה — מורשת של מאה שנה</h2>
-          <p>
-            רבי ישעיה מקרסטיר, מגדולי האדמו״רים בפולין שלפני מלחמת העולם השנייה, היה ידוע באירוחו הנדיב
-            ובדאגתו לכל עני ויתום שהגיע לפתחו. ביתו לא ננעל מעולם, ושולחנו תמיד היה ערוך לאורחים.
-          </p>
-          <p>
-            עמותת <strong>אהל ישעיה</strong> בחדרה ממשיכה את מורשת זאת — מדי שבוע אנו אורזים ומחלקים
-            סלי מזון למשפחות הזקוקות לתמיכה, ברגישות, בכבוד, ובאהבה.
-          </p>
+      <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
+        <div className="about-grid">
+          <div className="about-text">
+            <span className="eyebrow start">המורשת</span>
+            <h2 className="h-display">שולחן פתוח, יד נדיבה — מורשת של מאה שנה</h2>
+            <p>
+              רבי ישעיה מקרסטיר, מגדולי האדמו״רים בפולין שלפני מלחמת העולם השנייה, היה ידוע באירוחו הנדיב
+              ובדאגתו לכל עני ויתום שהגיע לפתחו. ביתו לא ננעל מעולם, ושולחנו תמיד היה ערוך לאורחים.
+            </p>
+            <p>
+              עמותת <strong>אהל ישעיה</strong> ממשיכה את מורשת זאת — מדי שבוע אנו אורזים ומחלקים
+              סלי מזון למשפחות הזקוקות לתמיכה, ברגישות, בכבוד, ובאהבה.
+            </p>
 
-          <div className="about-quote">
-            ״טוב לב ויָד פתוחה הם המוני־מטבעות של נשמה אחת.״
-            <span className="attribution">— מסורת בית קרסטיר</span>
+            <div className="about-quote">
+              ״טוב לב ויָד פתוחה הם המוני־מטבעות של נשמה אחת.״
+              <span className="attribution">— מסורת בית קרסטיר</span>
+            </div>
           </div>
-        </div>
 
-        <div className="tent-card">
-          <div>
-            <div className="label">מאז ייסוד העמותה</div>
-            <div className="stat">2,400<span style={{ fontSize: 28, color: 'var(--gold)' }}>+</span></div>
-            <div className="stat-sub">סלי מזון חולקו למשפחות בחדרה</div>
-          </div>
-          {TENT_SVG}
-          <div>
-            <div className="label" style={{ marginBottom: 6 }}>השבוע</div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-              <div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, lineHeight: 1 }}>87</div>
-                <div className="stat-sub">משפחות</div>
-              </div>
-              <div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, lineHeight: 1 }}>14</div>
-                <div className="stat-sub">מתנדבים</div>
-              </div>
-              <div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, lineHeight: 1 }}>₪31k</div>
-                <div className="stat-sub">תרומות</div>
+          <div className="tent-card">
+            <div>
+              <div className="label">מאז ייסוד העמותה</div>
+              <div className="stat">10,000<span style={{ fontSize: 28, color: 'var(--gold)' }}>+</span></div>
+              <div className="stat-sub">סלי מזון חולקו למשפחות</div>
+            </div>
+            {TENT_SVG}
+            <div>
+              <div className="label" style={{ marginBottom: 6 }}>השבוע</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, lineHeight: 1 }}>100+</div>
+                  <div className="stat-sub">משפחות קבועות</div>
+                </div>
+                <div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, lineHeight: 1 }}>164</div>
+                  <div className="stat-sub">מתנדבים ומבשלות</div>
+                </div>
+                <div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 36, lineHeight: 1 }}>100+</div>
+                  <div className="stat-sub">אריזות שבועיות</div>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="about-banner" style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', height: '340px', border: '1px solid var(--line)', boxShadow: 'var(--shadow-soft)' }}>
+          <img src="assets/media__1784124309155.jpg" alt="הכנת מנות חמות וחלוקת מזון בעמותה" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
       </div>
     </section>);
@@ -294,12 +299,12 @@ function Logistics() {
               ״גָּדוֹל הָעוֹשֶׂה צְדָקָה בַּסֵּתֶר״.
             </p>
           </div>
-          <div className="logistics-grid">
+          <div className="logistics-grid" style={{ marginBottom: 32 }}>
             <div className="logistics-cell">
               <div className="key" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Icon.calendar width="14" height="14" /> מתי
               </div>
-              <div className="val">ימי חמישי</div>
+              <div className="val">ימי חמישי ולפי הצורך השבועי</div>
               <div className="meta" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Icon.clock width="14" height="14" /> לפנות שבת · לפי מסלול קבוע
               </div>
@@ -321,7 +326,12 @@ function Logistics() {
               </div>
             </div>
           </div>
-          <div style={{ marginTop: 36, padding: '20px 24px', borderTop: '1px solid rgba(180,150,80,0.25)', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', justifyContent: 'center', textAlign: 'center' }}>
+
+          <div style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden', height: '280px', border: '1px solid rgba(180,150,80,0.3)', marginBottom: 12 }}>
+            <img src="assets/media__1784124309059.jpg" alt="טעינת סלי המזון לרכבי החלוקה" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+
+          <div style={{ marginTop: 32, padding: '20px 24px', borderTop: '1px solid rgba(180,150,80,0.25)', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', justifyContent: 'center', textAlign: 'center' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--gold)' }}>מכירים משפחה בצנעה?</span>
             <span style={{ color: 'rgba(253,250,244,0.85)', fontSize: 15 }}>
               פנייה חסויה לחלוטין — <a href="#contact" style={{ color: 'var(--gold)', borderBottom: '1px solid var(--gold)', paddingBottom: 1 }}>צרו קשר</a>
@@ -334,14 +344,125 @@ function Logistics() {
 }
 
 // ====== Volunteer ======
-function Volunteer() {
+function VolunteerForm() {
+  const [form, setForm] = useState({ firstName: '', lastName: '', phone: '', source: '' });
+  const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
+  function update(k, v) {
+    setForm(prev => ({ ...prev, [k]: v }));
+    if (errors[k]) setErrors(prev => ({ ...prev, [k]: null }));
+  }
+
+  function submit(e) {
+    e.preventDefault();
+    const next = {};
+    if (!form.firstName.trim()) next.firstName = 'נא למלא שם פרטי';
+    if (!form.lastName.trim()) next.lastName = 'נא למלא שם משפחה';
+    if (!form.phone.trim()) next.phone = 'נא למלא טלפון';
+    else if (!/^[\d\s\-+()]{7,}$/.test(form.phone.trim())) next.phone = 'מספר טלפון לא תקין';
+    if (!form.source.trim()) next.source = 'נא לציין איך הגעת אלינו';
+
+    setErrors(next);
+    if (Object.keys(next).length === 0) {
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setForm({ firstName: '', lastName: '', phone: '', source: '' });
+      }, 5000);
+    }
+  }
+
+  return (
+    <form className="volunteer-form" onSubmit={submit} noValidate style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '12px',
+      marginTop: '20px',
+      background: 'rgba(255,255,255,0.7)',
+      padding: '20px',
+      borderRadius: 'var(--radius-md)',
+      border: '1px solid var(--line)',
+      boxShadow: 'var(--shadow-soft)'
+    }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+        <div className="field">
+          <label htmlFor="vf-fname" style={{ fontSize: '11px', color: 'var(--ink-soft)', fontFamily: 'var(--font-mono)' }}>שם פרטי</label>
+          <input
+            id="vf-fname"
+            type="text"
+            value={form.firstName}
+            onChange={(e) => update('firstName', e.target.value)}
+            placeholder="ישראל"
+            style={{ padding: '10px 12px', fontSize: '14px', borderRadius: '8px', border: '1px solid var(--line)', backgroundColor: '#fff' }}
+          />
+          {errors.firstName && <div className="field-error" style={{ fontSize: '11px', color: 'red', marginTop: '2px' }}>{errors.firstName}</div>}
+        </div>
+        <div className="field">
+          <label htmlFor="vf-lname" style={{ fontSize: '11px', color: 'var(--ink-soft)', fontFamily: 'var(--font-mono)' }}>שם משפחה</label>
+          <input
+            id="vf-lname"
+            type="text"
+            value={form.lastName}
+            onChange={(e) => update('lastName', e.target.value)}
+            placeholder="ישראלי"
+            style={{ padding: '10px 12px', fontSize: '14px', borderRadius: '8px', border: '1px solid var(--line)', backgroundColor: '#fff' }}
+          />
+          {errors.lastName && <div className="field-error" style={{ fontSize: '11px', color: 'red', marginTop: '2px' }}>{errors.lastName}</div>}
+        </div>
+      </div>
+      <div className="field">
+        <label htmlFor="vf-phone" style={{ fontSize: '11px', color: 'var(--ink-soft)', fontFamily: 'var(--font-mono)' }}>מספר טלפון</label>
+        <input
+          id="vf-phone"
+          type="tel"
+          value={form.phone}
+          onChange={(e) => update('phone', e.target.value)}
+          placeholder="050-000-0000"
+          style={{ padding: '10px 12px', fontSize: '14px', borderRadius: '8px', border: '1px solid var(--line)', backgroundColor: '#fff' }}
+        />
+        {errors.phone && <div className="field-error" style={{ fontSize: '11px', color: 'red', marginTop: '2px' }}>{errors.phone}</div>}
+      </div>
+      <div className="field">
+        <label htmlFor="vf-source" style={{ fontSize: '11px', color: 'var(--ink-soft)', fontFamily: 'var(--font-mono)' }}>איך הגעת אלינו?</label>
+        <input
+          id="vf-source"
+          type="text"
+          value={form.source}
+          onChange={(e) => update('source', e.target.value)}
+          placeholder="דרך חברים, פייסבוק, חיפוש בגוגל וכו׳"
+          style={{ padding: '10px 12px', fontSize: '14px', borderRadius: '8px', border: '1px solid var(--line)', backgroundColor: '#fff' }}
+        />
+        {errors.source && <div className="field-error" style={{ fontSize: '11px', color: 'red', marginTop: '2px' }}>{errors.source}</div>}
+      </div>
+      <button type="submit" className="btn btn-royal" style={{ width: '100%', justifyContent: 'center', padding: '12px 20px', fontSize: '15px' }}>
+        {submitted ? 'ההרשמה נשלחה בהצלחה!' : 'שליחת טופס הרשמה'}
+        {!submitted && <Icon.arrow className="arrow" width="14" />}
+      </button>
+      {submitted && (
+        <div style={{
+          marginTop: '10px',
+          padding: '12px',
+          borderRadius: '8px',
+          background: 'rgba(180,150,80,0.12)',
+          border: '1px solid var(--gold)',
+          fontSize: '13px',
+          color: 'var(--royal-deep)',
+          textAlign: 'center'
+        }}>
+          תודה על הרצון לעזור! פרטי ההתנדבות נשלחו ישירות למייל של העמותה (hello@ohel-yeshaya.org). הצוות יצור איתך קשר בהקדם 🤍
+        </div>
+      )}
+    </form>
+  );
+}
+
+function Volunteer() {
   return (
     <section className="section" id="volunteer">
       <div className="container volunteer-grid">
-        <div className="volunteer-image">
-          <div className="placeholder-tag">photography · volunteers packing parcels · 4:5</div>
+        <div className="volunteer-image" style={{ overflow: 'hidden', borderRadius: 'var(--radius-lg)' }}>
+          <img src="assets/media__1784124309052.jpg" alt="מתנדבי עמותת אהל ישעיה באריזת מזון במטבח" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
         <div className="volunteer-text">
           <span className="eyebrow start">משפחת המתנדבים</span>
@@ -352,22 +473,14 @@ function Volunteer() {
           </p>
           <ul className="volunteer-list">
             <li><span className="dot" /> אריזת סלים — ימי שני, 19:00–21:00</li>
-            <li><span className="dot" /> חלוקה דיסקרטית בבתים — ימי חמישי</li>
+            <li><span className="dot" /> חלוקה דיסקרטית בבתים — ימי חמישי ולפי הצורך השבועי</li>
             <li><span className="dot" /> נהיגה ולוגיסטיקה — לפי תיאום</li>
           </ul>
-          <button className="btn btn-royal" onClick={() => setSubmitted(true)}>
-            להרשמה להתנדבות
-            <Icon.arrow className="arrow" width="14" />
-          </button>
-          {submitted &&
-          <div style={{ marginTop: 18, padding: 14, borderRadius: 10, background: 'rgba(180,150,80,0.12)', border: '1px solid var(--gold)', fontSize: 14, color: 'var(--royal-deep)' }}>
-              תודה! הצוות יצור איתך קשר בקרוב 🤍
-            </div>
-          }
+          <VolunteerForm />
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }
 
 // ====== Donate ======
@@ -409,7 +522,7 @@ function Donate({ donateRef }) {
         <div className="donate-head">
           <span className="eyebrow">תרומה</span>
           <h2 className="h-display">בחרו סל. תוסיפו ברכה. הוסיפו אור.</h2>
-          <p>כל סכום מתורגם ישירות למזון על שולחנה של משפחה בחדרה. 100% מהתרומה מגיעה ליעדה.</p>
+          <p>כל סכום מתורגם ישירות למזון על שולחנה של משפחה נזקקת. 100% מהתרומה מגיעה ליעדה.</p>
         </div>
 
         <div className="donate-card">
@@ -501,11 +614,7 @@ function Footer() {
             </p>
             <p>ע״ש רבי ישעיה מקרסטיר — חסד, אירוח, ויד פתוחה.</p>
           </div>
-          <div>
-            <h4>החלוקה</h4>
-            <p>ימי חמישי · בסתר</p>
-            <p>לרשימת משפחות סגורה</p>
-          </div>
+
           <div>
             <h4>צור קשר</h4>
             <p><a href="tel:+972500000000">050-000-0000</a></p>
@@ -637,7 +746,7 @@ function Contact() {
               </li>
               <li>
                 <span className="ci-key">פעילות</span>
-                <span className="ci-val">חדרה והסביבה</span>
+                <span className="ci-val">בפריסה ארצית וגלובלית</span>
               </li>
             </ul>
           </div>
